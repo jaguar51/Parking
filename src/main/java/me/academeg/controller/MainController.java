@@ -11,17 +11,30 @@ import java.io.IOException;
 
 public class MainController {
 
-    @FXML
-    void rentBox() {
+    @FXML private void rentBox() {
         Parent root;
         try {
-//            root = FXMLLoader.load(getClass().getResource("/fxml/rent_box.fxml"));
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/rent_box.fxml"));
             root = loader.load();
-//            loader.getController() можно добавить ссылку на этот контроллер и обмениваться инфой
             Stage stage = new Stage();
             stage.setTitle("Аренда бокса");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML private void parkCar() {
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/park_car.fxml"));
+            root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Постановка авто на стоянку");
             stage.setScene(new Scene(root, 450, 450));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
