@@ -22,16 +22,32 @@ public class Client {
         return surname;
     }
 
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPatronymic() {
         return patronymic;
     }
 
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
+    }
+
     public String getPhone() {
         return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public static Client parse(ResultSet rs) throws SQLException {

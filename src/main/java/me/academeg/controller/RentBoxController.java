@@ -1,7 +1,11 @@
 package me.academeg.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import me.academeg.API.Client;
@@ -10,9 +14,9 @@ import me.academeg.API.Employee;
 import me.academeg.API.ParkingLot;
 import me.academeg.Components.AutoCompleteComboBoxListener;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -169,6 +173,38 @@ public class RentBoxController {
 //        Close window
         Stage stage = (Stage) rentBTN.getScene().getWindow();
         stage.close();
+    }
+
+    public void updateClientList()  {
+        ContentProvider contentProvider = new ContentProvider();
+        try {
+            contentProvider.open();
+            clients = contentProvider.getClients();
+            clientsCB.getItems().removeAll();
+            clientsCB.getItems().addAll(clients);
+            contentProvider.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void createUser() {
+        Parent root;
+        try {
+//            root = FXMLLoader.load(getClass().getResource("/fxml/rent_box.fxml"));
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/create_client.fxml"));
+            root = loader.load();
+            ((CreateClientController) loader.getController()).setRentBoxController(this);
+            Stage stage = new Stage();
+            stage.setTitle("Добавление клиента");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showError(String msg) {

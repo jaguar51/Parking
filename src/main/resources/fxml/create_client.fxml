@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
 <AnchorPane
         xmlns="http://javafx.com/javafx/8"
         xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="me.academeg.controller.RentBoxController">
+        fx:controller="me.academeg.controller.CreateClientController">
 
     <GridPane
             gridLinesVisible="false"
@@ -17,12 +19,8 @@
             AnchorPane.bottomAnchor="5.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES"/>
-            <ColumnConstraints hgrow="SOMETIMES"/>
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints vgrow="NEVER"/>
-            <RowConstraints vgrow="NEVER"/>
-            <RowConstraints vgrow="NEVER"/>
             <RowConstraints vgrow="NEVER"/>
             <RowConstraints vgrow="NEVER"/>
             <RowConstraints vgrow="NEVER"/>
@@ -34,98 +32,69 @@
         </rowConstraints>
 
         <Label
-                text="Выберите бокс для аренды:"
+                text="Фамилия:"
                 GridPane.columnIndex="0"
                 GridPane.halignment="LEFT"
                 GridPane.rowIndex="0"/>
-        <ComboBox
-                fx:id="lotsCB"
+
+        <TextField
+                fx:id="surnameTF"
+                promptText="Фамилия"
                 maxWidth="Infinity"
                 GridPane.columnIndex="0"
-                GridPane.columnSpan="2"
                 GridPane.halignment="CENTER"
                 GridPane.rowIndex="1"/>
 
         <Label
-                text="Выберите дату начала аренды:"
+                text="Имя:"
                 GridPane.columnIndex="0"
                 GridPane.halignment="LEFT"
                 GridPane.rowIndex="2"/>
 
-        <DatePicker
-                fx:id="startRentDP"
+        <TextField
+                fx:id="nameTF"
+                promptText="Имя"
                 maxWidth="Infinity"
                 GridPane.columnIndex="0"
-                GridPane.columnSpan="2"
                 GridPane.halignment="CENTER"
                 GridPane.rowIndex="3"/>
 
         <Label
-                text="Выберите дату окончания аренды:"
+                text="Отчество:"
                 GridPane.columnIndex="0"
                 GridPane.halignment="LEFT"
                 GridPane.rowIndex="4"/>
 
-        <DatePicker
-                fx:id="endRentDP"
+        <TextField
+                fx:id="patronymicTF"
+                promptText="Отчество"
                 maxWidth="Infinity"
                 GridPane.columnIndex="0"
-                GridPane.columnSpan="2"
                 GridPane.halignment="CENTER"
                 GridPane.rowIndex="5"/>
 
-        <TextField
-                fx:id="coastTF"
-                promptText="Введите стоимость стоянки за 1 день"
+        <Label
+                text="Телефон:"
                 GridPane.columnIndex="0"
-                GridPane.columnSpan="2"
-                GridPane.halignment="CENTER"
+                GridPane.halignment="LEFT"
                 GridPane.rowIndex="6"/>
 
-        <Label
-                text="Сотрудник:"
+        <TextField
+                fx:id="phoneTF"
+                promptText="Телефон"
+                maxWidth="Infinity"
                 GridPane.columnIndex="0"
-                GridPane.halignment="LEFT"
+                GridPane.halignment="CENTER"
                 GridPane.rowIndex="7"/>
 
-        <ComboBox
-                fx:id="employeesCB"
+        <Button
+                fx:id="okBTN"
+                onMouseClicked="#createClient"
+                text="ОК"
                 maxWidth="Infinity"
                 GridPane.columnIndex="0"
-                GridPane.columnSpan="2"
                 GridPane.halignment="CENTER"
                 GridPane.rowIndex="8"/>
-
-        <Label
-                text="Клиент:"
-                GridPane.columnIndex="0"
-                GridPane.halignment="LEFT"
-                GridPane.rowIndex="9"/>
-
-        <ComboBox
-                fx:id="clientsCB"
-                maxWidth="Infinity"
-                GridPane.columnIndex="0"
-                GridPane.halignment="CENTER"
-                GridPane.rowIndex="10"/>
-
-        <Button
-                onMouseClicked="#createUser"
-                maxWidth="Infinity"
-                text="Добавить клиента"
-                GridPane.columnIndex="1"
-                GridPane.halignment="CENTER"
-                GridPane.rowIndex="10"/>
-
-        <Button
-                fx:id="rentBTN"
-                onMouseClicked="#rentLot"
-                maxWidth="Infinity"
-                text="Арендовать"
-                GridPane.columnIndex="0"
-                GridPane.columnSpan="2"
-                GridPane.halignment="CENTER"
-                GridPane.rowIndex="11"/>
 
     </GridPane>
 </AnchorPane>

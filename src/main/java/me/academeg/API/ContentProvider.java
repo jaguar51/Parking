@@ -60,13 +60,24 @@ public class ContentProvider {
         return res;
     }
 
+    public void createClient(Client client) throws SQLException {
+        String insertSQL = "insert Client(Surname, Name, Patronymic, Phone)\n" +
+                "values (?, ?, ?, ?);";
+        PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
+        preparedStatement.setString(1, client.getSurname());
+        preparedStatement.setString(2, client.getName());
+        preparedStatement.setString(3, client.getPatronymic());
+        preparedStatement.setString(4, client.getPhone());
+        preparedStatement.execute();
+    }
+
     public void rentLot(Client client, ParkingLot lot, Employee employee,
                         LocalDate startDate, LocalDate endDate, float coast) throws SQLException {
 
-        String updateTableSQL = "insert into Rent_lot (ID_Client, ID_Employee, ID_Lot, Price_per_day, " +
+        String insertSQL = "insert into Rent_lot (ID_Client, ID_Employee, ID_Lot, Price_per_day, " +
                 "Start_date_reserve, End_date_reserve)\n" +
                 "values (?, ?, ?, ?, convert(datetime, ? , 104), convert(datetime, ? , 104));";
-        PreparedStatement preparedStatement = connection.prepareStatement(updateTableSQL);
+        PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
         preparedStatement.setInt(1, client.getId());
         preparedStatement.setInt(2, employee.getId());
         preparedStatement.setInt(3, lot.getId());
