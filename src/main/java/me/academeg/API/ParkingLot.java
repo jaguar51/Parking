@@ -8,6 +8,10 @@ public class ParkingLot {
     public ParkingLot() {
     }
 
+    public ParkingLot(int id) {
+        this.id = id;
+    }
+
     public ParkingLot(int id, String description) {
         this.id = id;
         this.description = description;

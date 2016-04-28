@@ -35,6 +35,7 @@
                         GridPane.rowIndex="0" />
                 <Button
                         text="Поставить автомобиль на стоянку"
+                        onMouseClicked="#parkCar"
                         maxWidth="Infinity"
                         GridPane.columnIndex="0"
                         GridPane.halignment="CENTER"

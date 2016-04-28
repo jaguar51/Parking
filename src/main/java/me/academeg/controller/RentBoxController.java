@@ -153,6 +153,7 @@ public class RentBoxController {
             coast = Float.parseFloat(coastTF.getText());
         } catch (NumberFormatException exc) {
             showError(exc.getMessage());
+            return;
         }
 
         if (client == null || lot == null || employee == null ||  startDate == null || endDate == null || coast < 0) {
