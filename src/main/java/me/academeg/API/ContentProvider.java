@@ -20,7 +20,7 @@ public class ContentProvider {
     }
 
     public void close() throws SQLException {
-        if(connection!=null) {
+        if(connection != null) {
             connection.close();
         }
     }
@@ -82,6 +82,26 @@ public class ContentProvider {
         ArrayList<Auto> res = new ArrayList<>();
         while(rs.next()){
             res.add(Auto.parse(rs));
+        }
+        rs.close();
+        preparedStatement.close();
+        return res;
+    }
+
+    public ArrayList<AutoOnPark> getAutoPark(Client client) throws SQLException {
+        String getSQL = "select b.ID as ID_Auto, b.Plate, b.Brand, b.Color, b.Add_inf, a.ID as ID_Operation\n" +
+                "from Park_car as a\n" +
+                "inner join Auto as b\n" +
+                "on a.ID_Auto = b.ID\n" +
+                "inner join Client_Auto as c\n" +
+                "on a.ID_Auto = c.AutoID\n" +
+                "where a.End_parking is null and c.ClientID = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(getSQL);
+        preparedStatement.setInt(1, client.getId());
+        ResultSet rs = preparedStatement.executeQuery();
+        ArrayList<AutoOnPark> res = new ArrayList<>();
+        while(rs.next()){
+            res.add(AutoOnPark.parse(rs));
         }
         rs.close();
         preparedStatement.close();
@@ -150,6 +170,15 @@ public class ContentProvider {
         preparedStatement.setInt(3, auto.getId());
         preparedStatement.setInt(4, lot.getId());
         preparedStatement.setString(5, startDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        preparedStatement.execute();
+        preparedStatement.close();
+    }
+
+    public void takeAuto(AutoOnPark auto, LocalDateTime endDateTime) throws SQLException {
+        String updateSQL = "update Park_car set End_parking = convert(datetime, ? , 120) where id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
+        preparedStatement.setString(1, endDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        preparedStatement.setInt(2, auto.getOperationId());
         preparedStatement.execute();
         preparedStatement.close();
     }

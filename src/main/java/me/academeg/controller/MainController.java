@@ -42,4 +42,20 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    @FXML private void takeAutoClick() {
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/take_auto.fxml"));
+            root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Забрать автомобиль");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

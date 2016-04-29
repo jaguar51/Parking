@@ -42,6 +42,7 @@
                         GridPane.rowIndex="1" />
                 <Button
                         text="Забрать автомобиль"
+                        onMouseClicked="#takeAutoClick"
                         maxWidth="Infinity"
                         GridPane.columnIndex="0"
                         GridPane.halignment="CENTER"
