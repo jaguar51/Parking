@@ -1,9 +1,13 @@
 package me.academeg.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import me.academeg.API.*;
@@ -13,6 +17,7 @@ import me.academeg.stringConverters.EmployeesStringConverter;
 import me.academeg.stringConverters.LotsStringConverter;
 import tornadofx.control.DateTimePicker;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ParkCarController {
+public class ParkCarController implements UpdateCallback {
 
     @FXML private ComboBox<Client> clientCB;
     @FXML private ComboBox<ParkingLot> lotCB;
@@ -134,6 +139,42 @@ public class ParkCarController {
 
         Stage stage = (Stage) okBTN.getScene().getWindow();
         stage.close();
+    }
+
+    @FXML private void createAutoClick() {
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/create_auto.fxml"));
+            root = loader.load();
+            ((CreateAutoController)loader.getController()).setCallback(this);
+            Stage stage = new Stage();
+            stage.setTitle("Добавить автомобиль");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void update() {
+        Client client = clientCB.getValue();
+        if (client == null) {
+            return;
+        }
+        ContentProvider provider = new ContentProvider();
+        try {
+            provider.open();
+            ArrayList<Auto> autos = provider.getAutoForParking(client);
+            if (autos.size() > 0) {
+                autoCB.getItems().setAll(autos);
+            }
+            provider.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showError(String msg) {

@@ -133,14 +133,38 @@ public class ContentProvider {
     }
 
     public void createClient(Client client) throws SQLException {
-        String insertSQL = "insert Client(Surname, Name, Patronymic, Phone)\n" +
-                "values (?, ?, ?, ?);";
+        String insertSQL = "insert Client(Surname, Name, Patronymic, Phone) values (?, ?, ?, ?);";
         PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
         preparedStatement.setString(1, client.getSurname());
         preparedStatement.setString(2, client.getName());
         preparedStatement.setString(3, client.getPatronymic());
         preparedStatement.setString(4, client.getPhone());
         preparedStatement.execute();
+    }
+
+    public void createAuto(Auto auto, Client client) throws SQLException {
+//        insert auto
+        String insertAutoSQL = "insert into Auto (Brand, Plate, Color, Add_inf) values (?, ?, ?, ?); " +
+                "select @@IDENTITY as ID";
+        PreparedStatement preparedStatement = connection.prepareStatement(insertAutoSQL);
+        preparedStatement.setString(1, auto.getBrand());
+        preparedStatement.setString(2, auto.getPlate());
+        preparedStatement.setString(3, auto.getColor());
+        preparedStatement.setString(4, auto.getAddInf());
+//        get the id of the last inserted record
+        ResultSet rs = preparedStatement.executeQuery();
+        rs.next();
+        int recordId = rs.getInt(1);
+        rs.close();
+        preparedStatement.close();
+
+//        client and auto connection
+        String insertAutoClientSQL = "insert into Client_Auto (ClientID, AutoID) values (?, ?);";
+        preparedStatement = connection.prepareStatement(insertAutoClientSQL);
+        preparedStatement.setInt(1, client.getId());
+        preparedStatement.setInt(2, recordId);
+        preparedStatement.execute();
+        preparedStatement.close();
     }
 
     public void rentLot(Client client, ParkingLot lot, Employee employee,
@@ -182,27 +206,4 @@ public class ContentProvider {
         preparedStatement.execute();
         preparedStatement.close();
     }
-
-    private void test() throws SQLException {
-        Statement st = connection.createStatement();
-        //Statement позволяет отправлять запросы базе данных
-        ResultSet rs = st.executeQuery("select * from Park_car");
-        //ResultSet получает результирующую таблицу
-        int x = rs.getMetaData().getColumnCount();
-        //результирующей таблице
-        while(rs.next()){
-            for(int i=1; i<=x;i++){
-                System.out.print(rs.getString(i) + "\t");
-            }
-            System.out.println();
-        }
-        System.out.println();
-        if(rs != null) {
-            rs.close();
-        }
-        if(st != null) {
-            st.close();
-        }
-    }
-
 }

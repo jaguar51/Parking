@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
-<?import tornadofx.control.DateTimePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ComboBox?>
 <AnchorPane
         xmlns="http://javafx.com/javafx/8"
         xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="me.academeg.controller.ParkCarController">
+        fx:controller="me.academeg.controller.CreateAutoController">
 
     <GridPane
             gridLinesVisible="false"
@@ -17,7 +20,6 @@
             AnchorPane.rightAnchor="5.0"
             AnchorPane.bottomAnchor="5.0">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES"/>
             <ColumnConstraints hgrow="SOMETIMES"/>
         </columnConstraints>
         <rowConstraints>
@@ -35,7 +37,7 @@
         </rowConstraints>
 
         <Label
-                text="Клиент:"
+                text="Владелец:"
                 GridPane.columnIndex="0"
                 GridPane.halignment="LEFT"
                 GridPane.rowIndex="0"/>
@@ -44,81 +46,71 @@
                 fx:id="clientCB"
                 maxWidth="Infinity"
                 GridPane.columnIndex="0"
-                GridPane.columnSpan="2"
-                GridPane.halignment="CENTER"
+                GridPane.halignment="LEFT"
                 GridPane.rowIndex="1"/>
 
         <Label
-                text="Бокс:"
+                text="Номер:"
                 GridPane.columnIndex="0"
                 GridPane.halignment="LEFT"
                 GridPane.rowIndex="2"/>
 
-        <ComboBox
-                fx:id="lotCB"
+        <TextField
+                fx:id="plateTF"
+                promptText="Номер"
                 maxWidth="Infinity"
                 GridPane.columnIndex="0"
-                GridPane.columnSpan="2"
                 GridPane.halignment="CENTER"
                 GridPane.rowIndex="3"/>
 
         <Label
-                text="Авто:"
+                text="Марка:"
                 GridPane.columnIndex="0"
                 GridPane.halignment="LEFT"
                 GridPane.rowIndex="4"/>
 
-        <ComboBox
-                fx:id="autoCB"
+        <TextField
+                fx:id="brandTF"
+                promptText="Марка"
                 maxWidth="Infinity"
                 GridPane.columnIndex="0"
                 GridPane.halignment="CENTER"
                 GridPane.rowIndex="5"/>
 
-        <Button
-                onMouseClicked="#createAutoClick"
-                text="Добавить автомобиль"
-                maxWidth="Infinity"
-                GridPane.columnIndex="1"
-                GridPane.halignment="CENTER"
-                GridPane.rowIndex="5"/>
-
         <Label
-                text="Время и дата начала стоянки"
+                text="Цвет:"
                 GridPane.columnIndex="0"
                 GridPane.halignment="LEFT"
                 GridPane.rowIndex="6"/>
 
-        <DateTimePicker
-                fx:id="startDateDP"
+        <TextField
+                fx:id="colorTF"
+                promptText="Цвет"
                 maxWidth="Infinity"
-                format="dd.MM.yyyy HH:mm"
                 GridPane.columnIndex="0"
-                GridPane.columnSpan="2"
                 GridPane.halignment="CENTER"
                 GridPane.rowIndex="7"/>
 
         <Label
-                text="Сотрудник:"
+                text="Дополнительная информация:"
                 GridPane.columnIndex="0"
                 GridPane.halignment="LEFT"
                 GridPane.rowIndex="8"/>
 
-        <ComboBox
-                fx:id="employeesCB"
+        <TextArea
+                fx:id="additionalInfoTA"
                 maxWidth="Infinity"
+                prefRowCount="5"
                 GridPane.columnIndex="0"
-                GridPane.columnSpan="2"
                 GridPane.halignment="CENTER"
                 GridPane.rowIndex="9"/>
 
         <Button
                 fx:id="okBTN"
-                onMouseClicked="#parkCarClick"
+                onMouseClicked="#createAuto"
                 text="ОК"
                 maxWidth="Infinity"
                 GridPane.columnIndex="0"
-                GridPane.columnSpan="2"
                 GridPane.halignment="CENTER"
                 GridPane.rowIndex="10"/>
 
