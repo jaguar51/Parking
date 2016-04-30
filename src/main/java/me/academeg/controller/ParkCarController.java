@@ -7,7 +7,10 @@ import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import me.academeg.API.*;
-import me.academeg.Components.AutoCompleteComboBoxListener;
+import me.academeg.components.AutoCompleteComboBoxListener;
+import me.academeg.stringConverters.ClientsStringConverter;
+import me.academeg.stringConverters.EmployeesStringConverter;
+import me.academeg.stringConverters.LotsStringConverter;
 import tornadofx.control.DateTimePicker;
 
 import java.sql.SQLException;
@@ -27,7 +30,6 @@ public class ParkCarController {
     @FXML private Button okBTN;
 
     @FXML private void initialize() {
-
         ContentProvider contentProvider = new ContentProvider();
         try {
             contentProvider.open();
@@ -51,29 +53,6 @@ public class ParkCarController {
         lotCB.setDisable(true);
         autoCB.setDisable(true);
         startDateDP.setValue(LocalDate.now());
-        new AutoCompleteComboBoxListener<>(clientCB);
-        clientCB.setConverter(new StringConverter<Client>() {
-            private Map<String, Client> map = new HashMap<>();
-
-            @Override
-            public String toString(Client object) {
-                if (object != null) {
-                    String key = String.format("%s %s %s", object.getSurname(), object.getName(),
-                            object.getPatronymic());
-                    map.put(key, object);
-                    return key;
-                }
-                return "";
-            }
-
-            @Override
-            public Client fromString(String string) {
-                if (!map.containsKey(string)) {
-                    return null;
-                }
-                return map.get(string);
-            }
-        });
 
         new AutoCompleteComboBoxListener<>(autoCB);
         autoCB.setConverter(new StringConverter<Auto>() {
@@ -100,51 +79,13 @@ public class ParkCarController {
         });
 
         new AutoCompleteComboBoxListener<>(lotCB);
-        lotCB.setConverter(new StringConverter<ParkingLot>() {
-            private Map<String, ParkingLot> map = new HashMap<>();
-
-            @Override
-            public String toString(ParkingLot object) {
-                if (object != null) {
-                    String key = Integer.toString(object.getId());
-                    map.put(key, object);
-                    return key;
-                }
-                return "";
-            }
-
-            @Override
-            public ParkingLot fromString(String string) {
-                if (!map.containsKey(string)) {
-                    return null;
-                }
-                return map.get(string);
-            }
-        });
+        lotCB.setConverter(new LotsStringConverter());
 
         new AutoCompleteComboBoxListener<>(employeesCB);
-        employeesCB.setConverter(new StringConverter<Employee>() {
-            private Map<String, Employee> map = new HashMap<>();
-            @Override
-            public String toString(Employee object) {
-                if (object != null) {
-                    String key = String.format("%s %s %s", object.getSurname(), object.getName(),
-                            object.getPatronymic());
-                    map.put(key, object);
-                    return key;
-                }
-                return "";
-            }
+        employeesCB.setConverter(new EmployeesStringConverter());
 
-            @Override
-            public Employee fromString(String string) {
-                if (!map.containsKey(string)) {
-                    return null;
-                }
-                return map.get(string);
-            }
-        });
-
+        new AutoCompleteComboBoxListener<>(clientCB);
+        clientCB.setConverter(new ClientsStringConverter());
         clientCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             ContentProvider provider = new ContentProvider();
             try {

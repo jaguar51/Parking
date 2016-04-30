@@ -7,25 +7,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import me.academeg.API.Client;
 import me.academeg.API.ContentProvider;
 import me.academeg.API.Employee;
 import me.academeg.API.ParkingLot;
-import me.academeg.Components.AutoCompleteComboBoxListener;
+import me.academeg.components.AutoCompleteComboBoxListener;
+import me.academeg.stringConverters.ClientsStringConverter;
+import me.academeg.stringConverters.EmployeesStringConverter;
+import me.academeg.stringConverters.LotsStringConverter;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class RentBoxController {
-
-    private ArrayList<ParkingLot> freeParkingLot;
-    private ArrayList<Employee> employees;
-    private ArrayList<Client> clients;
+public class RentBoxController implements UpdateCallback {
 
     @FXML private ComboBox<ParkingLot> lotsCB;
     @FXML private DatePicker startRentDP;
@@ -35,30 +31,28 @@ public class RentBoxController {
     @FXML private ComboBox<Client> clientsCB;
     @FXML private Button rentBTN;
 
-
-    @FXML
-    private void initialize() {
+    @FXML private void initialize() {
         initViews();
         try {
             ContentProvider contentProvider = new ContentProvider();
             contentProvider.open();
-            freeParkingLot = contentProvider.getFreeParkingLot();
-            employees = contentProvider.getEmployees();
-            clients = contentProvider.getClients();
+            ArrayList<ParkingLot> freeParkingLot = contentProvider.getFreeParkingLot();
+            ArrayList<Employee> employees = contentProvider.getEmployees();
+            ArrayList<Client> clients = contentProvider.getClients();
             contentProvider.close();
 
             if (freeParkingLot.size() > 0) {
-                lotsCB.getItems().addAll(freeParkingLot);
+                lotsCB.getItems().setAll(freeParkingLot);
                 lotsCB.setValue(freeParkingLot.get(0));
             }
 
             if (employees.size() > 0) {
-                employeesCB.getItems().addAll(employees);
+                employeesCB.getItems().setAll(employees);
                 employeesCB.setValue(employees.get(0));
             }
 
             if (clients.size() > 0) {
-                clientsCB.getItems().addAll(clients);
+                clientsCB.getItems().setAll(clients);
             }
 
         } catch (SQLException e) {
@@ -68,87 +62,24 @@ public class RentBoxController {
         endRentDP.setValue(LocalDate.now().plusDays(1));
     }
 
-    @FXML
-    private void initViews() {
+    @FXML private void initViews() {
         new AutoCompleteComboBoxListener<>(lotsCB);
-        lotsCB.setConverter(new StringConverter<ParkingLot>() {
-            private Map<String, ParkingLot> map = new HashMap<>();
-
-            @Override
-            public String toString(ParkingLot object) {
-                if (object != null) {
-                    String key = Integer.toString(object.getId());
-                    map.put(key, object);
-                    return key;
-                }
-                return "";
-            }
-
-            @Override
-            public ParkingLot fromString(String string) {
-                if (!map.containsKey(string)) {
-                    return null;
-                }
-                return map.get(string);
-            }
-        });
+        lotsCB.setConverter(new LotsStringConverter());
 
         new AutoCompleteComboBoxListener<>(employeesCB);
-        employeesCB.setConverter(new StringConverter<Employee>() {
-            private Map<String, Employee> map = new HashMap<>();
-            @Override
-            public String toString(Employee object) {
-                if (object != null) {
-                    String key = String.format("%s %s %s", object.getSurname(), object.getName(),
-                            object.getPatronymic());
-                    map.put(key, object);
-                    return key;
-                }
-                return "";
-            }
-
-            @Override
-            public Employee fromString(String string) {
-                if (!map.containsKey(string)) {
-                    return null;
-                }
-                return map.get(string);
-            }
-        });
+        employeesCB.setConverter(new EmployeesStringConverter());
 
         new AutoCompleteComboBoxListener<>(clientsCB);
-        clientsCB.setConverter(new StringConverter<Client>() {
-            private Map<String, Client> map = new HashMap<>();
-
-            @Override
-            public String toString(Client object) {
-                if (object != null) {
-                    String key = String.format("%s %s %s", object.getSurname(), object.getName(),
-                            object.getPatronymic());
-                    map.put(key, object);
-                    return key;
-                }
-                return "";
-            }
-
-            @Override
-            public Client fromString(String string) {
-                if (!map.containsKey(string)) {
-                    return null;
-                }
-                return map.get(string);
-            }
-        });
+        clientsCB.setConverter(new ClientsStringConverter());
     }
 
-    @FXML
-    private void rentLot() {
+    @FXML private void rentLot() {
         Client client = clientsCB.getValue();
         ParkingLot lot = lotsCB.getValue();
         Employee employee = employeesCB.getValue();
         LocalDate startDate = startRentDP.getValue();
         LocalDate endDate = endRentDP.getValue();
-        float coast = 0;
+        float coast;
         try {
             coast = Float.parseFloat(coastTF.getText());
         } catch (NumberFormatException exc) {
@@ -176,11 +107,15 @@ public class RentBoxController {
         stage.close();
     }
 
-    public void updateClientList()  {
+    /**
+     * Update client list after add new client
+     */
+    @Override
+    public void update() {
         ContentProvider contentProvider = new ContentProvider();
         try {
             contentProvider.open();
-            clients = contentProvider.getClients();
+            ArrayList<Client> clients = contentProvider.getClients();
             clientsCB.getItems().removeAll();
             clientsCB.getItems().addAll(clients);
             contentProvider.close();
@@ -189,15 +124,13 @@ public class RentBoxController {
         }
     }
 
-    @FXML
-    private void createUser() {
+    @FXML private void createUser() {
         Parent root;
         try {
-//            root = FXMLLoader.load(getClass().getResource("/fxml/rent_box.fxml"));
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/create_client.fxml"));
             root = loader.load();
-            ((CreateClientController) loader.getController()).setRentBoxController(this);
+            ((CreateClientController) loader.getController()).setCallback(this);
             Stage stage = new Stage();
             stage.setTitle("Добавление клиента");
             stage.setScene(new Scene(root, 450, 450));
@@ -217,5 +150,4 @@ public class RentBoxController {
 //        stage.getIcons().add(new Image(getClass().getResource("/icon.png").toString()));
         alert.showAndWait();
     }
-
 }

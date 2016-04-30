@@ -1,4 +1,4 @@
-package me.academeg.Components;
+package me.academeg.components;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

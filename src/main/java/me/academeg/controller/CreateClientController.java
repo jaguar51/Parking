@@ -18,10 +18,10 @@ public class CreateClientController {
     @FXML private TextField phoneTF;
     @FXML private Button okBTN;
 
-    private RentBoxController rentBoxController;
+    private UpdateCallback callback;
 
-    public void setRentBoxController(RentBoxController rentBoxController) {
-        this.rentBoxController = rentBoxController;
+    public void setCallback(UpdateCallback callback) {
+        this.callback = callback;
     }
 
     @FXML private void createClient() {
@@ -46,8 +46,8 @@ public class CreateClientController {
             return;
         }
 
-        if (rentBoxController != null) {
-            rentBoxController.updateClientList();
+        if (callback != null) {
+            callback.update();
         }
         Stage stage = (Stage) okBTN.getScene().getWindow();
         stage.close();

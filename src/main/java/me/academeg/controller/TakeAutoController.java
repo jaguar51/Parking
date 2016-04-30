@@ -9,7 +9,8 @@ import javafx.util.StringConverter;
 import me.academeg.API.AutoOnPark;
 import me.academeg.API.Client;
 import me.academeg.API.ContentProvider;
-import me.academeg.Components.AutoCompleteComboBoxListener;
+import me.academeg.components.AutoCompleteComboBoxListener;
+import me.academeg.stringConverters.ClientsStringConverter;
 import tornadofx.control.DateTimePicker;
 
 import java.sql.SQLException;
@@ -40,35 +41,13 @@ public class TakeAutoController {
             e.printStackTrace();
         }
 
-        new AutoOnPark();
         initViews();
     }
 
     private void initViews() {
         autoCB.setDisable(true);
         new AutoCompleteComboBoxListener<>(clientCB);
-        clientCB.setConverter(new StringConverter<Client>() {
-            private Map<String, Client> map = new HashMap<>();
-
-            @Override
-            public String toString(Client object) {
-                if (object != null) {
-                    String key = String.format("%s %s %s", object.getSurname(), object.getName(),
-                            object.getPatronymic());
-                    map.put(key, object);
-                    return key;
-                }
-                return "";
-            }
-
-            @Override
-            public Client fromString(String string) {
-                if (!map.containsKey(string)) {
-                    return null;
-                }
-                return map.get(string);
-            }
-        });
+        clientCB.setConverter(new ClientsStringConverter());
         clientCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             ContentProvider provider = new ContentProvider();
             try {
