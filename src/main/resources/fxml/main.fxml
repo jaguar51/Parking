@@ -22,6 +22,7 @@
             <RowConstraints vgrow="NEVER"/>
             <RowConstraints vgrow="NEVER"/>
             <RowConstraints vgrow="NEVER"/>
+            <RowConstraints vgrow="NEVER"/>
         </rowConstraints>
 
         <Button
@@ -45,6 +46,14 @@
                 GridPane.columnIndex="0"
                 GridPane.halignment="CENTER"
                 GridPane.rowIndex="2"/>
+
+        <Button
+                text="Количество свободных боксов"
+                onMouseClicked="#showFreeLotAlert"
+                maxWidth="Infinity"
+                GridPane.columnIndex="0"
+                GridPane.halignment="CENTER"
+                GridPane.rowIndex="3"/>
 
     </GridPane>
 </AnchorPane>

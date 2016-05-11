@@ -25,6 +25,16 @@ public class ContentProvider {
         }
     }
 
+    public int getFreeParkingLotCount() throws SQLException {
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery("declare @num int=5; exec getCountFreePlace @num output; select str(@num) as count;");
+        rs.next();
+        int res =rs.getInt(1);
+        rs.close();
+        st.close();
+        return res;
+    }
+
     public ArrayList<ParkingLot> getFreeParkingLot() throws SQLException {
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery("select * from dbo.GetFreeLot()");
@@ -181,6 +191,7 @@ public class ContentProvider {
         preparedStatement.setString(5, startDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
         preparedStatement.setString(6, endDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
         preparedStatement.execute();
+        preparedStatement.close();
     }
 
     public void parkAuto(Client client, Employee employee, Auto auto, ParkingLot lot, LocalDateTime startDateTime)

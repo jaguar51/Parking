@@ -53,6 +53,7 @@ public class RentBoxController implements UpdateCallback {
 
             if (clients.size() > 0) {
                 clientsCB.getItems().setAll(clients);
+                clientsCB.setValue(clients.get(0));
             }
 
         } catch (SQLException e) {
@@ -62,7 +63,7 @@ public class RentBoxController implements UpdateCallback {
         endRentDP.setValue(LocalDate.now().plusDays(1));
     }
 
-    @FXML private void initViews() {
+    private void initViews() {
         new AutoCompleteComboBoxListener<>(lotsCB);
         lotsCB.setConverter(new LotsStringConverter());
 

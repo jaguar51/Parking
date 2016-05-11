@@ -4,10 +4,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import me.academeg.API.ContentProvider;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class MainController {
 
@@ -57,5 +60,26 @@ public class MainController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML private void showFreeLotAlert() {
+        ContentProvider contentProvider = new ContentProvider();
+        String msg;
+        try {
+            contentProvider.open();
+            msg = Integer.toString(contentProvider.getFreeParkingLotCount());
+            contentProvider.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Количество свободных боксов");
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+//        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+//        stage.getIcons().add(new Image(getClass().getResource("/icon.png").toString()));
+        alert.showAndWait();
     }
 }
