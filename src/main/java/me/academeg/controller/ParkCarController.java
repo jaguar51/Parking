@@ -35,9 +35,7 @@ public class ParkCarController implements UpdateCallback {
     @FXML private Button okBTN;
 
     @FXML private void initialize() {
-        ContentProvider contentProvider = new ContentProvider();
-        try {
-            contentProvider.open();
+        try (ContentProvider contentProvider = new ContentProvider()) {
             ArrayList<Client> clients = contentProvider.getClients();
             if (clients.size() > 0) {
                 clientCB.getItems().setAll(clients);
@@ -46,7 +44,6 @@ public class ParkCarController implements UpdateCallback {
             if (employees.size() > 0) {
                 employeesCB.getItems().setAll(employees);
             }
-            contentProvider.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -92,17 +89,14 @@ public class ParkCarController implements UpdateCallback {
         new AutoCompleteComboBoxListener<>(clientCB);
         clientCB.setConverter(new ClientsStringConverter());
         clientCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            ContentProvider provider = new ContentProvider();
-            try {
+            try (ContentProvider provider = new ContentProvider()) {
                 if (newValue != null) {
-                    provider.open();
                     lotCB.setValue(null);
                     lotCB.getItems().setAll(provider.getFreeParkingLot(newValue));
                     lotCB.setDisable(false);
                     autoCB.setValue(null);
                     autoCB.getItems().setAll(provider.getAutoForParking(newValue));
                     autoCB.setDisable(false);
-                    provider.close();
                 } else {
                     lotCB.getItems().clear();
                     lotCB.setDisable(true);
@@ -126,11 +120,8 @@ public class ParkCarController implements UpdateCallback {
             return;
         }
 
-        ContentProvider contentProvider = new ContentProvider();
-        try {
-            contentProvider.open();
+        try (ContentProvider contentProvider = new ContentProvider()) {
             contentProvider.parkAuto(client, employee, auto, lot, date);
-            contentProvider.close();
         } catch (SQLException e) {
             e.printStackTrace();
             showError(e.getMessage());
@@ -164,14 +155,11 @@ public class ParkCarController implements UpdateCallback {
         if (client == null) {
             return;
         }
-        ContentProvider provider = new ContentProvider();
-        try {
-            provider.open();
+        try (ContentProvider provider = new ContentProvider()) {
             ArrayList<Auto> autos = provider.getAutoForParking(client);
             if (autos.size() > 0) {
                 autoCB.getItems().setAll(autos);
             }
-            provider.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

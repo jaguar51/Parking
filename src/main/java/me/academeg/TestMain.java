@@ -8,12 +8,9 @@ import java.util.ArrayList;
 
 public class TestMain {
     public static void main(String[] args) {
-        ContentProvider contentProvider = new ContentProvider();
-        try {
-            contentProvider.open();
+        try (ContentProvider contentProvider = new ContentProvider()) {
             ArrayList<ParkingLot> freeParkingLot = contentProvider.getFreeParkingLot();
             freeParkingLot.forEach(System.out::println);
-            contentProvider.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

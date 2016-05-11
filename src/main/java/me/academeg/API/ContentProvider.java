@@ -6,19 +6,20 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class ContentProvider {
+public class ContentProvider implements AutoCloseable {
 
     private static Connection connection = null;
     private static String username = "user";
     private static String password = "1234";
     private static String URL = "jdbc:jtds:sqlserver://localhost:1433;databaseName=parking";
 
-    public void open() throws SQLException {
+    public ContentProvider() throws SQLException {
         DriverManager.registerDriver(new net.sourceforge.jtds.jdbc.Driver());
         //Загружаем драйвер
         connection = DriverManager.getConnection(URL, username, password);
     }
 
+    @Override
     public void close() throws SQLException {
         if(connection != null) {
             connection.close();

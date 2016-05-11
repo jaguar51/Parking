@@ -35,11 +35,8 @@ public class CreateClientController {
             return;
         }
 
-        ContentProvider contentProvider = new ContentProvider();
-        try {
-            contentProvider.open();
+        try (ContentProvider contentProvider = new ContentProvider()) {
             contentProvider.createClient(client);
-            contentProvider.close();
         } catch (SQLException e) {
             e.printStackTrace();
             showError(e.getMessage());

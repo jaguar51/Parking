@@ -63,12 +63,9 @@ public class MainController {
     }
 
     @FXML private void showFreeLotAlert() {
-        ContentProvider contentProvider = new ContentProvider();
         String msg;
-        try {
-            contentProvider.open();
+        try (ContentProvider contentProvider = new ContentProvider()) {
             msg = Integer.toString(contentProvider.getFreeParkingLotCount());
-            contentProvider.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return;

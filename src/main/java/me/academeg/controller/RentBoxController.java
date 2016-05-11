@@ -33,13 +33,10 @@ public class RentBoxController implements UpdateCallback {
 
     @FXML private void initialize() {
         initViews();
-        try {
-            ContentProvider contentProvider = new ContentProvider();
-            contentProvider.open();
+        try (ContentProvider contentProvider = new ContentProvider()) {
             ArrayList<ParkingLot> freeParkingLot = contentProvider.getFreeParkingLot();
             ArrayList<Employee> employees = contentProvider.getEmployees();
             ArrayList<Client> clients = contentProvider.getClients();
-            contentProvider.close();
 
             if (freeParkingLot.size() > 0) {
                 lotsCB.getItems().setAll(freeParkingLot);
@@ -93,11 +90,8 @@ public class RentBoxController implements UpdateCallback {
             return;
         }
 
-        ContentProvider contentProvider = new ContentProvider();
-        try {
-            contentProvider.open();
+        try (ContentProvider contentProvider = new ContentProvider()) {
             contentProvider.rentLot(client, lot, employee, startDate, endDate, coast);
-            contentProvider.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return;
@@ -113,13 +107,10 @@ public class RentBoxController implements UpdateCallback {
      */
     @Override
     public void update() {
-        ContentProvider contentProvider = new ContentProvider();
-        try {
-            contentProvider.open();
+        try (ContentProvider contentProvider = new ContentProvider()) {
             ArrayList<Client> clients = contentProvider.getClients();
             clientsCB.getItems().removeAll();
             clientsCB.getItems().addAll(clients);
-            contentProvider.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

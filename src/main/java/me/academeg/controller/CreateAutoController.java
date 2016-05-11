@@ -24,16 +24,13 @@ public class CreateAutoController {
     @FXML private Button okBTN;
 
     @FXML private void initialize() {
-        ContentProvider provider = new ContentProvider();
-        try {
-            provider.open();
+        try (ContentProvider provider = new ContentProvider()) {
             ArrayList<Client> clients = provider.getClients();
             if (clients.size() > 0) {
                 clientCB.getItems().setAll(clients);
                 new AutoCompleteComboBoxListener<>(clientCB);
                 clientCB.setConverter(new ClientsStringConverter());
             }
-            provider.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,11 +54,8 @@ public class CreateAutoController {
             auto.setAddInf(null);
         }
 
-        ContentProvider provider = new ContentProvider();
-        try {
-            provider.open();
+        try (ContentProvider provider = new ContentProvider()) {
             provider.createAuto(auto, client);
-            provider.close();
         } catch (SQLException e) {
             showError(e.getMessage());
             e.printStackTrace();

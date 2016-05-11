@@ -29,14 +29,11 @@ public class TakeAutoController {
     @FXML private void initialize() {
         endDateDP.setDateTimeValue(LocalDateTime.now());
 
-        ContentProvider contentProvider = new ContentProvider();
-        try {
-            contentProvider.open();
+        try (ContentProvider contentProvider = new ContentProvider()) {
             ArrayList<Client> clients = contentProvider.getClients();
             if (clients != null && clients.size() > 0) {
                 clientCB.getItems().setAll(clients);
             }
-            contentProvider.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -49,13 +46,10 @@ public class TakeAutoController {
         new AutoCompleteComboBoxListener<>(clientCB);
         clientCB.setConverter(new ClientsStringConverter());
         clientCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            ContentProvider provider = new ContentProvider();
-            try {
+            try (ContentProvider provider = new ContentProvider()) {
                 if (newValue != null) {
-                    provider.open();
                     autoCB.getItems().setAll(provider.getAutoPark(newValue));
                     autoCB.setDisable(false);
-                    provider.close();
                 } else {
                     autoCB.getItems().clear();
                     autoCB.setDisable(true);
@@ -101,11 +95,8 @@ public class TakeAutoController {
             return;
         }
 
-        ContentProvider provider = new ContentProvider();
-        try {
-            provider.open();
+        try (ContentProvider provider = new ContentProvider()) {
             provider.takeAuto(auto, dateTime);
-            provider.close();
         } catch (SQLException e) {
             showError(e.getMessage());
             e.printStackTrace();
