@@ -79,4 +79,20 @@ public class MainController {
 //        stage.getIcons().add(new Image(getClass().getResource("/icon.png").toString()));
         alert.showAndWait();
     }
+
+    @FXML private void testViewClick() {
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/test_view.fxml"));
+            root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Test View");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

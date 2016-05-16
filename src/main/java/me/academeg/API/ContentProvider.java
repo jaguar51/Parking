@@ -21,7 +21,7 @@ public class ContentProvider implements AutoCloseable {
 
     @Override
     public void close() throws SQLException {
-        if(connection != null) {
+        if (connection != null) {
             connection.close();
         }
     }
@@ -30,7 +30,7 @@ public class ContentProvider implements AutoCloseable {
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery("declare @num int=5; exec getCountFreePlace @num output; select str(@num) as count;");
         rs.next();
-        int res =rs.getInt(1);
+        int res = rs.getInt(1);
         rs.close();
         st.close();
         return res;
@@ -40,7 +40,7 @@ public class ContentProvider implements AutoCloseable {
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery("select * from dbo.GetFreeLot()");
         ArrayList<ParkingLot> res = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             res.add(new ParkingLot(rs.getInt(1), rs.getString(2)));
         }
         rs.close();
@@ -62,7 +62,7 @@ public class ContentProvider implements AutoCloseable {
         preparedStatement.setInt(1, client.getId());
         ResultSet rs = preparedStatement.executeQuery();
         ArrayList<ParkingLot> res = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             res.add(new ParkingLot(rs.getInt(1)));
         }
         rs.close();
@@ -91,7 +91,7 @@ public class ContentProvider implements AutoCloseable {
         preparedStatement.setInt(1, client.getId());
         ResultSet rs = preparedStatement.executeQuery();
         ArrayList<Auto> res = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             res.add(Auto.parse(rs));
         }
         rs.close();
@@ -111,7 +111,7 @@ public class ContentProvider implements AutoCloseable {
         preparedStatement.setInt(1, client.getId());
         ResultSet rs = preparedStatement.executeQuery();
         ArrayList<AutoOnPark> res = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             res.add(AutoOnPark.parse(rs));
         }
         rs.close();
@@ -123,7 +123,7 @@ public class ContentProvider implements AutoCloseable {
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery("select ID, Surname, Name, Patronymic, Phone, ID_Position from Employee");
         ArrayList<Employee> res = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             res.add(Employee.parse(rs));
         }
         rs.close();
@@ -135,7 +135,7 @@ public class ContentProvider implements AutoCloseable {
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery("select ID, Surname, Name, Patronymic, Phone from Client");
         ArrayList<Client> res = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             res.add(Client.parse(rs));
         }
         rs.close();
@@ -217,5 +217,20 @@ public class ContentProvider implements AutoCloseable {
         preparedStatement.setInt(2, auto.getOperationId());
         preparedStatement.execute();
         preparedStatement.close();
+    }
+
+    /**
+     * select from ClientShort view
+     */
+    public ArrayList<Client> testViewSelect() throws SQLException {
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery("select ID, Surname, Phone from ClientShort");
+        ArrayList<Client> res = new ArrayList<>();
+        while (rs.next()) {
+            res.add(Client.parseShort(rs));
+        }
+        rs.close();
+        st.close();
+        return res;
     }
 }

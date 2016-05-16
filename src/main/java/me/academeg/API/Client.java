@@ -60,6 +60,14 @@ public class Client {
         return res;
     }
 
+    public static Client parseShort(ResultSet rs) throws SQLException {
+        Client res = new Client();
+        res.id = rs.getInt(1);
+        res.surname = rs.getString(2);
+        res.phone = rs.getString(3);
+        return res;
+    }
+
     @Override
     public String toString() {
         return "Client{" +

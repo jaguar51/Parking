@@ -23,6 +23,7 @@
             <RowConstraints vgrow="NEVER"/>
             <RowConstraints vgrow="NEVER"/>
             <RowConstraints vgrow="NEVER"/>
+            <RowConstraints vgrow="NEVER"/>
         </rowConstraints>
 
         <Button
@@ -54,6 +55,15 @@
                 GridPane.columnIndex="0"
                 GridPane.halignment="CENTER"
                 GridPane.rowIndex="3"/>
+
+        <Button
+                text="Test view"
+                visible="false"
+                onMouseClicked="#testViewClick"
+                maxWidth="Infinity"
+                GridPane.columnIndex="0"
+                GridPane.halignment="CENTER"
+                GridPane.rowIndex="4"/>
 
     </GridPane>
 </AnchorPane>
