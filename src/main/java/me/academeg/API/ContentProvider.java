@@ -121,7 +121,7 @@ public class ContentProvider implements AutoCloseable {
 
     public ArrayList<Employee> getEmployees() throws SQLException {
         Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery("select * from Employee");
+        ResultSet rs = st.executeQuery("select ID, Surname, Name, Patronymic, Phone, ID_Position from Employee");
         ArrayList<Employee> res = new ArrayList<>();
         while(rs.next()){
             res.add(Employee.parse(rs));
@@ -133,7 +133,7 @@ public class ContentProvider implements AutoCloseable {
 
     public ArrayList<Client> getClients() throws SQLException {
         Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery("select * from Client");
+        ResultSet rs = st.executeQuery("select ID, Surname, Name, Patronymic, Phone from Client");
         ArrayList<Client> res = new ArrayList<>();
         while(rs.next()){
             res.add(Client.parse(rs));
