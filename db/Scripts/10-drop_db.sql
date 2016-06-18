@@ -1,0 +1,22 @@
+ALTER TABLE Employee DROP CONSTRAINT EmployeeFK;
+
+ALTER TABLE Client_Auto DROP CONSTRAINT Client_AutFKClient;
+ALTER TABLE Client_Auto DROP CONSTRAINT Client_AutFKAuto;
+
+ALTER TABLE Rent_lot DROP CONSTRAINT Rent_lotFKEmployee;
+ALTER TABLE Rent_lot DROP CONSTRAINT Rent_lotFKClient;
+ALTER TABLE Rent_lot DROP CONSTRAINT Rent_lotFKParking_lot;
+
+ALTER TABLE Park_car DROP CONSTRAINT Park_carFKEmployee;
+ALTER TABLE Park_car DROP CONSTRAINT Park_carFKClient;
+ALTER TABLE Park_car DROP CONSTRAINT Park_carFKParking_lot;
+ALTER TABLE Park_car DROP CONSTRAINT Park_carFKAuto;
+
+DROP TABLE Auto;
+DROP TABLE Client;
+DROP TABLE Client_Auto;
+DROP TABLE Employee;
+DROP TABLE Park_car;
+DROP TABLE Parking_lot;
+DROP TABLE Position;
+DROP TABLE Rent_lot;
